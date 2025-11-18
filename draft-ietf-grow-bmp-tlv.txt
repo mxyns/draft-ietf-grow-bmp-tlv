@@ -90,15 +90,14 @@ Table of Contents
        5.2.3.  Stateless Parsing TLV . . . . . . . . . . . . . . . .   9
      5.3.  TLV Data in Peer Down . . . . . . . . . . . . . . . . . .  10
      5.4.  TLV Data in Other BMP Messages  . . . . . . . . . . . . .  10
-   6.  Mandatory Timestamp . . . . . . . . . . . . . . . . . . . . .  11
-   7.  Error Handling  . . . . . . . . . . . . . . . . . . . . . . .  11
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   9.  Operational Considerations  . . . . . . . . . . . . . . . . .  11
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .  13
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Wire-format Example  . . . . . . . . . . . . . . . .  15
+   6.  Error Handling  . . . . . . . . . . . . . . . . . . . . . . .  11
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   8.  Operational Considerations  . . . . . . . . . . . . . . . . .  11
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  13
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  14
+   Appendix A.  Wire-format Example  . . . . . . . . . . . . . . . .  14
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  16
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
@@ -106,6 +105,7 @@ Table of Contents
 
    The BGP Monitoring Protocol (BMP) version 3 is defined in RFC 7854
    [RFC7854].
+
 
 
 
@@ -192,7 +192,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
    If a BMP station does not support the version indicated in the
    message, it SHOULD close the session and take the procedures
-   described in Error Handling (Section 7)
+   described in Error Handling (Section 6)
 
 4.  TLV Encoding
 
@@ -562,19 +562,7 @@ Lucente & Gu               Expires 22 May 2026                 [Page 10]
 Internet-Draft                   BMP TLV                   November 2025
 
 
-6.  Mandatory Timestamp
-
-   As defined by Section 4.2 of [RFC7854], it is not required to specify
-   a timestamp as part of any BMP message that includes a Per-peer
-   header.  This is not ideal, as expressed in Section 4.10 of
-   [I-D.boucadair-nmop-rfc3535-20years-later].  An event timestamp MUST
-   always be defined.  The observation timestamp SHOULD always be
-   preferred as reference for its inherent maximum accuracy in reporting
-   a given event; would that not be available in an implementation, the
-   next accurate timestamp SHOULD be picked up to, as a last resort, the
-   time at which the information was exported.
-
-7.  Error Handling
+6.  Error Handling
 
    RFC8654 [RFC8654] permits BGP Update and other messages to grow to a
    length of 65535 octets.  This may cause a BMP PDU that attempts to
@@ -592,12 +580,12 @@ Internet-Draft                   BMP TLV                   November 2025
    out of bounds), the TLV MUST be ignored.  The station SHOULD log the
    condition as a warning.
 
-8.  Security Considerations
+7.  Security Considerations
 
    It is not believed that this document adds any additional security
    considerations compared to RFC7854 [RFC7854].
 
-9.  Operational Considerations
+8.  Operational Considerations
 
    In Route Monitoring messages, the number of TLVs can be bound to the
    amount of NLRIs carried in the BGP Update message.  This may degrade
@@ -605,6 +593,18 @@ Internet-Draft                   BMP TLV                   November 2025
    on the memory and CPU used in a BMP implementation.  As a result of
    that it should always be possible to disable such features to
    mitigate their impact.
+
+   TLVs SHOULD be sorted by the sender by their type.  Multiple TLVs of
+   the same type can be repeated as part of the same message; it is left
+   to the specific use-cases whether all, any, the first or the last TLV
+   should be considered as well as whether ordering matters and
+   repeating is allowed.
+
+   It is recommended that implementors making use of the Enterprise Bit
+   extension have a well-defined internal registry for privately
+   assigned code points that is also exposed to the public.
+
+
 
 
 
@@ -618,17 +618,7 @@ Lucente & Gu               Expires 22 May 2026                 [Page 11]
 Internet-Draft                   BMP TLV                   November 2025
 
 
-   TLVs SHOULD be sorted by the sender by their type.  Multiple TLVs of
-   the same type can be repeated as part of the same message; it is left
-   to the specific use-cases whether all, any, the first or the last TLV
-   should be considered as well as whether ordering matters and
-   repeating is allowed.
-
-   It is recommended that implementors making use of the Enterprise Bit
-   extension have a well-defined internal registry for privately
-   assigned code points that is also exposed to the public.
-
-10.  IANA Considerations
+9.  IANA Considerations
 
    This document requests IANA to rename of the "BMP Peer Up Message
    TLVs" registry defined by BMP Peer Up Message Namespace [RFC9736]
@@ -667,13 +657,6 @@ Internet-Draft                   BMP TLV                   November 2025
    16384-32767 as First Come First Served (in place of current
    32768-65530).
 
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 12]
-
-Internet-Draft                   BMP TLV                   November 2025
-
-
    This document also requests to remove the Experimental allocation
    from the same registries, the code points now flagged Experimental
    will become Unassigned.  The top most bit of each registry will be
@@ -681,9 +664,17 @@ Internet-Draft                   BMP TLV                   November 2025
    availble value for assignment for the registries will be 32767 (ie.
    as opposed to current 65530).
 
-11.  References
+10.  References
 
-11.1.  Normative References
+
+
+
+Lucente & Gu               Expires 22 May 2026                 [Page 12]
+
+Internet-Draft                   BMP TLV                   November 2025
+
+
+10.1.  Normative References
 
    [I-D.boucadair-nmop-rfc3535-20years-later]
               Boucadair, M., Contreras, L. M., de Dios, O. G., Graf, T.,
@@ -722,14 +713,6 @@ Internet-Draft                   BMP TLV                   November 2025
               Support for BGP", RFC 8654, DOI 10.17487/RFC8654, October
               2019, <https://www.rfc-editor.org/info/rfc8654>.
 
-
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 13]
-
-Internet-Draft                   BMP TLV                   November 2025
-
-
    [RFC9069]  Evens, T., Bayraktar, S., Bhardwaj, M., and P. Lucente,
               "Support for Local RIB in the BGP Monitoring Protocol
               (BMP)", RFC 9069, DOI 10.17487/RFC9069, February 2022,
@@ -740,7 +723,14 @@ Internet-Draft                   BMP TLV                   November 2025
               DOI 10.17487/RFC9736, March 2025,
               <https://www.rfc-editor.org/info/rfc9736>.
 
-11.2.  Informative References
+
+
+Lucente & Gu               Expires 22 May 2026                 [Page 13]
+
+Internet-Draft                   BMP TLV                   November 2025
+
+
+10.2.  Informative References
 
    [IANA-BMP] IANA, "BGP Monitoring Protocol (BMP) Parameters", 2016,
               <https://www.iana.org/assignments/bmp-parameters/bmp-
@@ -774,18 +764,6 @@ Internet-Draft                   BMP TLV                   November 2025
               DOI 10.17487/RFC7911, July 2016,
               <https://www.rfc-editor.org/info/rfc7911>.
 
-
-
-
-
-
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 14]
-
-Internet-Draft                   BMP TLV                   November 2025
-
-
 Appendix A.  Wire-format Example
 
    The diagram in Figure 6 shows an example of a Route Monitoring
@@ -799,6 +777,14 @@ Appendix A.  Wire-format Example
    3.  a Stateless Parsing TLV with index 0x0000, stating that the Add-
        Path Capability is set to Both(Snd/Rcv) for the IPv4 Unicast
        address family in the BGP UPDATE.
+
+
+
+
+Lucente & Gu               Expires 22 May 2026                 [Page 14]
+
+Internet-Draft                   BMP TLV                   November 2025
+
 
    4.  a TLV pertaining to NLRI 7
 
@@ -834,14 +820,6 @@ Appendix A.  Wire-format Example
       |0|           index=0           |     code=69   |     len=4     |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |      afi=1    |    safi=1     |     value=3   |
-
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 15]
-
-Internet-Draft                   BMP TLV                   November 2025
-
-
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |            type=1             |         length=X              |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -856,6 +834,14 @@ Internet-Draft                   BMP TLV                   November 2025
       |1|           index=0x000b      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                          value={4 bytes}                      |
+
+
+
+Lucente & Gu               Expires 22 May 2026                 [Page 15]
+
+Internet-Draft                   BMP TLV                   November 2025
+
+
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |            type=SomeTlvY      |         length=0x0008         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -886,18 +872,6 @@ Acknowledgements
 
 Authors' Addresses
 
-
-
-
-
-
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 16]
-
-Internet-Draft                   BMP TLV                   November 2025
-
-
    Paolo Lucente
    NTT
    Veemweg 23
@@ -919,34 +893,4 @@ Internet-Draft                   BMP TLV                   November 2025
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Lucente & Gu               Expires 22 May 2026                 [Page 17]
+Lucente & Gu               Expires 22 May 2026                 [Page 16]
