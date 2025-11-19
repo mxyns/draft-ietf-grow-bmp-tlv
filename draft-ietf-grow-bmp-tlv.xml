@@ -187,7 +187,7 @@
 	        <t>
 		    <list style="symbols">
                         <t>
-                        	1 bit to flag an enterprise-specific TLV, set to zero. The
+                        	1 bit to flag an enterprise-specific TLV, set to 0. The
                         	TLV Type value must have been defined in <xref target="IANA-BMP">IANA-BMP</xref>
                         </t>
 		        <t>
@@ -207,7 +207,7 @@
 	    	        <![CDATA[
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |E|             Type            |     Length (2 octets)         |
+  |E|        Type (15 bits)       |     Length (2 octets)         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   ~                      Value (variable)                         ~
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -223,7 +223,7 @@
             <t>
                 <list style="symbols">
                     <t>
-                        1 bit to flag an enterprise-specific TLV, set to one
+                        1 bit to flag an enterprise-specific TLV, set to 1
                     </t>
                     <t>
                         15 bits of TLV Type,
@@ -244,9 +244,9 @@
                     <![CDATA[
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |E|             Type            |     Length (2 octets)         |
+  |E|        Type (15 bits)       |     Length (2 octets)         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                        Enterprise number                      |
+  |                    Enterprise number (4 octets)               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                        Value (variable)                       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -258,21 +258,20 @@
                 documented in <xref target="RFC7854">Section 4.8 of</xref>. E-bit
                 does hence similarly apply to these messages too, with the most
                 relevant bit of Stat Type set to 1 in order to flag the presence
-                of a 4-bytes PEN field following Stat Len field and preceding Stat
-                Data field, i.e.:
+		of a 4-bytes PEN field following Stat Len field and preceding
+		Stat Data field, i.e.:
             </t>
             <figure anchor="BMP-Stats-Report-enterprise--header" align="center">
                 <artwork align="center">
                     <![CDATA[
 
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |E|       Stat Type             |          Stat Len             |
+     |E|     Stat Type (15 bits)     |     Stat Len (2 octets)       |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                        Enterprise number                      |
+     |                    Enterprise number (4 octets)               |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                        Stat Data                              |
+     |                        Stat Data (variable)                   |
      ~                                                               ~
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                     ]]>
@@ -318,7 +317,7 @@
 	    	    <![CDATA[
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |        Type (2 octets)        |     Length (2 octets)         |
+  |E|       Type (15 bits)        |     Length (2 octets)         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |G|      Index (15 bits)        |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -358,11 +357,11 @@
                     <![CDATA[
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |E|             Type            |     Length (2 octets)         |
+  |E|       Type (15 bits)        |     Length (2 octets)         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |        Index (2 octets)       |
+  |G|      Index (15 bits)        |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                        Enterprise number                      |
+  |                  Enterprise number (4 octets)                 |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                        Value (variable)                       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -403,9 +402,9 @@
 		<t>
 		    	The BGP Update PDU (<xref section="4.3" sectionFormat="of"
 			target="RFC4271"/>) is encoded itself as part of a BGP Message TLV
-			with code point &IANA_RM_CODE_BGP_PDU; and index set to zero. A Route
-			Monitoring message MUST contain one BGP Message TLV which may be
-			preceded or followed by other optional TLV data.
+			with code point &IANA_RM_CODE_BGP_PDU; and index set to 0.
+			A Route Monitoring message MUST contain one BGP Message TLV which
+			may be preceded or followed by other optional TLV data.
 		</t>
 		<t>
 		    	Corollary, the BGP Update PDU is not encoded as part of the message
@@ -427,8 +426,8 @@
 		    The Group TLV value MUST contain:
 		    <list style="symbols">
 		    <t>A 2-byte Group Index where the top-most bit (G-bit) MUST 
-		    be set to one (1). The full 2-byte value, that is including the
-		    G-bit, MUST be unique to the message</t>
+		    be set to 1. The full 2-byte value, that is including the G-bit,
+		    MUST be unique to the message</t>
 		    <t>Two or more 2-byte NLRI indexes whose values MUST be less
 		    or equal to the amount of NLRIs packed in the BGP Update PDU.</t>
 		    </list>
@@ -503,7 +502,7 @@
 		    </list>
 		</t>
 		<t>
-		    The index of the Stateless Parsing TLV MUST be set to zero. 
+		    The index of the Stateless Parsing TLV MUST be set to 0. 
 		</t>
 		<t>
 		    If no Stateless Parsing TLV is present in a Route Monitoring
@@ -734,7 +733,7 @@
                     </t>
 				    <t>
 						a Stateless Parsing TLV with index 0x0000, stating that
-						the Add-Path Capability is set to Both(Snd/Rcv) for the
+						the Add-Path Capability is set to Both (Snd/Rcv) for the
 						IPv4 Unicast address family in the BGP UPDATE.
 				    </t>
                     <t>
@@ -754,33 +753,32 @@
                 <figure anchor="BMP-RM-TLVs" align="center">
                     <artwork align="center">
                         <![CDATA[
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |        Common Header + Per-Peer Header (6 + 42 bytes)         ~
   ~                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=2             |         length=0x0008         |
+  |0|          type=2             |         length=0x0008         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |1|           index=0x000b      |
+  |1|           index=0x0001      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                  value={0x0001,   0x0002,                     |
   |                         0x0003,   0x000a}                     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=2             |        length=0x0006          |
+  |0|          type=2             |        length=0x0006          |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |1|           index=0x000c      |
+  |1|           index=0x0002      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                  value={0x0004,   0x0005,                     |
   |                         0x0006}                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=4             |         length=0x0005         |
+  |0|          type=4             |         length=0x0005         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |0|           index=0           |     code=69   |     len=4     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |      afi=1    |    safi=1     |     value=3   |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=1             |         length=X              |
+  |0|          type=1             |         length=X              |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |0|           index=0           |    value=$BGP_UPDATE_PDU{     ~
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               ~
@@ -788,20 +786,20 @@
   ~                       NLRI_1 .. NLRI_10                       ~
   ~                                                            }  |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=SomeTlvX      |         length=0x0004         |
+  |0|          type=SomeTlvX      |         length=0x0004         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |1|           index=0x000b      |
+  |1|           index=0x0001      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                          value={4 bytes}                      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=SomeTlvY      |         length=0x0008         |
+  |0|          type=SomeTlvY      |         length=0x0008         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |1|           index=0x000c      |
+  |1|           index=0x0002      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                          value={8 bytes}                      ~
   ~                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |            type=SomeTlvZ      |         length=0x0008         |
+  |0|          type=SomeTlvZ      |         length=0x0008         |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |0|           index=0x0007      |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

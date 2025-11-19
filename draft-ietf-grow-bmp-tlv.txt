@@ -206,8 +206,8 @@ Internet-Draft                   BMP TLV                   November 2025
 
 4.1.  IANA-registered TLV Encoding
 
-   *  1 bit to flag an enterprise-specific TLV, set to zero.  The TLV
-      Type value must have been defined in IANA-BMP [IANA-BMP]
+   *  1 bit to flag an enterprise-specific TLV, set to 0.  The TLV Type
+      value must have been defined in IANA-BMP [IANA-BMP]
 
    *  15 bits of TLV Type,
 
@@ -228,7 +228,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |E|             Type            |     Length (2 octets)         |
+      |E|        Type (15 bits)       |     Length (2 octets)         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       ~                      Value (variable)                         ~
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -240,7 +240,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
    Enterprise-specific TLV encoding is defined as follows:
 
-   *  1 bit to flag an enterprise-specific TLV, set to one
+   *  1 bit to flag an enterprise-specific TLV, set to 1
 
    *  15 bits of TLV Type,
 
@@ -254,9 +254,9 @@ Internet-Draft                   BMP TLV                   November 2025
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |E|             Type            |     Length (2 octets)         |
+      |E|        Type (15 bits)       |     Length (2 octets)         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                        Enterprise number                      |
+      |                    Enterprise number (4 octets)               |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                        Value (variable)                       |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -282,14 +282,13 @@ Lucente & Gu               Expires 22 May 2026                  [Page 5]
 Internet-Draft                   BMP TLV                   November 2025
 
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |E|       Stat Type             |          Stat Len             |
+       |E|     Stat Type (15 bits)     |     Stat Len (2 octets)       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Enterprise number                      |
+       |                    Enterprise number (4 octets)               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Stat Data                              |
+       |                        Stat Data (variable)                   |
        ~                                                               ~
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -333,6 +332,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
 
 
+
 Lucente & Gu               Expires 22 May 2026                  [Page 6]
 
 Internet-Draft                   BMP TLV                   November 2025
@@ -340,7 +340,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |        Type (2 octets)        |     Length (2 octets)         |
+      |E|       Type (15 bits)        |     Length (2 octets)         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |G|      Index (15 bits)        |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -372,11 +372,11 @@ Internet-Draft                   BMP TLV                   November 2025
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |E|             Type            |     Length (2 octets)         |
+      |E|       Type (15 bits)        |     Length (2 octets)         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |        Index (2 octets)       |
+      |G|      Index (15 bits)        |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                        Enterprise number                      |
+      |                  Enterprise number (4 octets)                 |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                        Value (variable)                       |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -414,7 +414,7 @@ Internet-Draft                   BMP TLV                   November 2025
    mandatory and optional TLVs.
 
    The BGP Update PDU (Section 4.3 of [RFC4271]) is encoded itself as
-   part of a BGP Message TLV with code point 4 and index set to zero.  A
+   part of a BGP Message TLV with code point 4 and index set to 0.  A
    Route Monitoring message MUST contain one BGP Message TLV which may
    be preceded or followed by other optional TLV data.
 
@@ -435,8 +435,8 @@ Internet-Draft                   BMP TLV                   November 2025
    The Group TLV value MUST contain:
 
    *  A 2-byte Group Index where the top-most bit (G-bit) MUST be set to
-      one (1).  The full 2-byte value, that is including the G-bit, MUST
-      be unique to the message
+      1.  The full 2-byte value, that is including the G-bit, MUST be
+      unique to the message
 
    *  Two or more 2-byte NLRI indexes whose values MUST be less or equal
       to the amount of NLRIs packed in the BGP Update PDU.
@@ -520,7 +520,7 @@ Internet-Draft                   BMP TLV                   November 2025
 
    *  Value, 1 byte, value=3
 
-   The index of the Stateless Parsing TLV MUST be set to zero.
+   The index of the Stateless Parsing TLV MUST be set to 0.
 
    If no Stateless Parsing TLV is present in a Route Monitoring message,
    the receiver MUST fall back to use capabilities present in the BGP
@@ -775,7 +775,7 @@ Appendix A.  Wire-format Example
    2.  a Group TLV with index 0x000c, pointing to NLRI 4, 5 and 6
 
    3.  a Stateless Parsing TLV with index 0x0000, stating that the Add-
-       Path Capability is set to Both(Snd/Rcv) for the IPv4 Unicast
+       Path Capability is set to Both (Snd/Rcv) for the IPv4 Unicast
        address family in the BGP UPDATE.
 
 
@@ -795,33 +795,32 @@ Internet-Draft                   BMP TLV                   November 2025
        2
 
 
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |        Common Header + Per-Peer Header (6 + 42 bytes)         ~
       ~                                                               |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=2             |         length=0x0008         |
+      |0|          type=2             |         length=0x0008         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |1|           index=0x000b      |
+      |1|           index=0x0001      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                  value={0x0001,   0x0002,                     |
       |                         0x0003,   0x000a}                     |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=2             |        length=0x0006          |
+      |0|          type=2             |        length=0x0006          |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |1|           index=0x000c      |
+      |1|           index=0x0002      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                  value={0x0004,   0x0005,                     |
       |                         0x0006}                               |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=4             |         length=0x0005         |
+      |0|          type=4             |         length=0x0005         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |0|           index=0           |     code=69   |     len=4     |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |      afi=1    |    safi=1     |     value=3   |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=1             |         length=X              |
+      |0|          type=1             |         length=X              |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |0|           index=0           |    value=$BGP_UPDATE_PDU{     ~
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               ~
@@ -829,11 +828,12 @@ Internet-Draft                   BMP TLV                   November 2025
       ~                       NLRI_1 .. NLRI_10                       ~
       ~                                                            }  |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=SomeTlvX      |         length=0x0004         |
+      |0|          type=SomeTlvX      |         length=0x0004         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |1|           index=0x000b      |
+      |1|           index=0x0001      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                          value={4 bytes}                      |
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 
@@ -842,15 +842,14 @@ Lucente & Gu               Expires 22 May 2026                 [Page 15]
 Internet-Draft                   BMP TLV                   November 2025
 
 
+      |0|          type=SomeTlvY      |         length=0x0008         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=SomeTlvY      |         length=0x0008         |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |1|           index=0x000c      |
+      |1|           index=0x0002      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                          value={8 bytes}                      ~
       ~                                                               |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |            type=SomeTlvZ      |         length=0x0008         |
+      |0|          type=SomeTlvZ      |         length=0x0008         |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |0|           index=0x0007      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -887,6 +886,7 @@ Authors' Addresses
    100095
    China
    Email: guyunan@huawei.com
+
 
 
 
