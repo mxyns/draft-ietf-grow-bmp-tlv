@@ -423,14 +423,16 @@
 		    repetitions.
 		</t>
 		<t>
-		    The Group TLV value MUST contain:
-		    <list style="symbols">
-		    <t>A 2-byte Group Index where the top-most bit (G-bit) MUST 
-		    be set to 1. The full 2-byte value, that is including the G-bit,
-		    MUST be unique to the message</t>
-		    <t>Two or more 2-byte NLRI indexes whose values MUST be less
-		    or equal to the amount of NLRIs packed in the BGP Update PDU.</t>
-		    </list>
+		    The 2-byte index defines a new Group Index and the top-most bit
+		    (G-bit) MUST be set to 1. The full 2-byte value, that is including
+		    the G-bit, MUST be unique to the message
+		</t>
+		<t>
+		    The value carries two or more 2-byte NLRI indexes whose values
+		    MUST be less or equal to the amount of NLRIs packed in the BGP
+		    Update PDU.
+		</t>
+		<t>
 		    An NLRI index can be listed as part of multiple Group TLVs within
 		    the same message. NLRI indexes within a Group TLV SHOULD be sorted
 		    by the sender. A Group Index MUST NOT reference an NLRI index 0.
