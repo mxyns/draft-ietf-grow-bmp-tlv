@@ -6,7 +6,10 @@
         <!ENTITY IANA_RM_CODE_SP "1">
         <!ENTITY IANA_RM_CODE_GROUP "2">
         <!ENTITY IANA_RM_CODE_VRF "3">
-        <!ENTITY IANA_RM_CODE_BGP_PDU "4">
+        <!ENTITY IANA_RM_CODE_TSTAMP "4">
+        <!ENTITY IANA_RM_CODE_SEQ "5">
+        <!ENTITY IANA_RM_CODE_FLAGS "6">
+        <!ENTITY IANA_RM_CODE_BGP_PDU "7">
         ]>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -53,6 +56,26 @@
                 <email>guyunan@huawei.com</email>
             </address>
         </author>
+	<author initials="M." surname="Younsi" fullname="Maxence Younsi">
+		<organization>INSA-Lyon</organization>
+		<address>
+			<postal>
+				<street/>
+				<country>France</country>
+			</postal>
+			<email>maxence.younsi@insa-lyon.fr</email>
+		</address>
+	</author>
+	<author initials="P." surname="Francois" fullname="Pierre Francois">
+		<organization>INSA-Lyon</organization>
+		<address>
+			<postal>
+				<street/>
+				<country>France</country>
+			</postal>
+			<email>pierre.francois@insa-lyon.fr</email>
+		</address>
+	</author>
 
         <date year="2026"/>
 
@@ -547,6 +570,226 @@
 		    with existing message types.
 		</t>
 	    </section>
+	    <section title="New TLVs in all BMP Messages" anchor="TLVinAll">
+		<t>
+		    TBD
+		</t>
+		<section title="Timestamp TLV" anchor="timestamp-tlv">
+			<t>In this section, we describe the optional Timestamp TLV. This
+			TLV carries one of multiple types of Timestamp for a BMP
+			message.</t>
+
+			<t>A TLV type &quot;Timestamp TLV&quot; needs to be reserved from
+			the TLV registries of all BMP message types. The value of the type
+			field of this TLV is <tt>XXX</tt>.</t>
+
+			<t>The value of the TLV is the &quot;Timestamp Type&quot; code,
+			defined in <xref target="list-timestamp-types"></xref>, followed
+			by the timestamp values expressed in seconds and microseconds
+			since midnight (zero hour), January 1, 1970 (UTC).</t>
+
+			<t>The encoding of the timestamp is identical to existing BMP
+			documents <xref target="RFC7854"></xref>, <xref target="RFC8671">
+			</xref>, and <xref target="RFC9069"></xref>, except that the
+			timestamp <bcp14>MUST NOT</bcp14> be set to zero to indicate
+			unavailability. The &quot;Timestamp TLV&quot; is optional, a
+			timestamp <bcp14>MUST NOT</bcp14> be included if it is not
+			available.</t>
+
+			<t>The value of the Length field is 9 bytes (1 byte for the
+			&quot;Timestamp Type&quot; field plus the length of the
+			&quot;Timestamp&quot; fields which are 4 bytes each). The
+			&quot;Index&quot; field is not included in the length.</t>
+
+			<t>The TLV structure is illustrated in <xref target="fig-timestamp-tlv">
+			</xref>.</t>
+
+<figure anchor="fig-timestamp-tlv"><name>Timestamp TLV
+</name>
+<artwork> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Type (2 octets)        |       Length (2 octets)       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|G|      Index (2 octets)       | Timestmp Type |               ~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~              Timestamp (seconds)              |               ~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~            Timestamp (microseconds)           ~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+</figure>
+
+			<t>The <xref target="sec-timestamp-types"></xref> defines the list
+			of currently defined Timestamp Types.</t>
+
+			<section title="Timestamp Types" anchor="sec-timestamp-types">
+				<t>The <xref target="list-timestamp-types"></xref> defines the list
+				of timestamp types that can be carried in the &quot;Timestamp TLV&quot;.
+				Each timestamp type is described in the section associated with its
+				name and code in the table.</t>
+	
+				<table anchor="list-timestamp-types">
+					<thead>
+					<tr>
+					<th>Code</th>
+					<th>Name</th>
+					<th>Section</th>
+					</tr>
+					</thead>
+	
+					<tbody>
+					<tr>
+					<td>0x00</td>
+					<td>Trigger Time</td>
+					<td><xref target="sec-timestamp-trigger"></xref></td>
+					</tr>
+					
+					<tr>
+					<td>0x01</td>
+					<td>Message Export Time</td>
+					<td><xref target="sec-timestamp-export"></xref></td>
+					</tr>
+					
+					<tr>
+					<td>0x02</td>
+					<td>Adj-In Time</td>
+					<td><xref target="sec-timestamp-adjin"></xref></td>
+					</tr>
+					
+					<tr>
+					<td>0x03</td>
+					<td>Local-RIB Time</td>
+					<td><xref target="sec-timestamp-locrib"></xref></td>
+					</tr>
+					
+					<tr>
+					<td>0x04</td>
+					<td>Adj-Out Time</td>
+					<td><xref target="sec-timestamp-adjout"></xref></td>
+					</tr>
+					</tbody>
+				</table>
+	
+				<section title="Trigger Time" anchor="sec-timestamp-trigger">
+					<t>The Trigger Time is the timestamp of the event which
+					triggered BMP to report the event. This might be a
+					received message, a BGP peering or a BMP session going
+					down or up, etc.</t>
+				</section>
+	
+				<section title="Message Export Time" anchor="sec-timestamp-export">
+					<t>The Message Export Time is the time at which BMP
+					generates the BMP message.</t>
+				</section>
+	
+				<section title="Adj-RIB-In Time" anchor="sec-timestamp-adjin">
+					<t>The Adj-In Time is the time at which the route has been
+					installed in the Adj-RIB-In, as per <xref target="RFC7854">
+					</xref>.</t>
+				</section>
+	
+				<section title="Local-RIB Time" anchor="sec-timestamp-locrib">
+					<t>The Local-RIB Time is the time at which the route has
+					been installed in the Local-RIB, as per <xref target="RFC9069">
+					</xref>.</t>
+				</section>
+	
+				<section title="Adj-RIB-Out Time" anchor="sec-timestamp-adjout">
+					<t>The Adj-Out Time is the time at which the route has been
+					installed in the Adj-RIB-Out, as per <xref target="RFC8671">
+					</xref>.</t>
+				</section>
+			</section>
+		</section>
+		<section title="Sequence Number TLV" anchor="seq-num-tlv">
+			<t>In this section, we describe the Sequence Number TLV. This
+			TLV carries the sequence number of a message in a BMP session.</t>
+
+			<t>Ordering of BMP messages based on timestamp becomes complicated
+			when timestamps have conflicting meanings or when they are simply
+			unavailable. A Sequence Number on a per BMP session basis allows
+			the operator to easily and uniquely identify BMP messages on a BMP
+			session.</t>
+
+			<t>A TLV type &quot;Sequence Number TLV&quot; needs to be reserved
+			from the BMP Route Monitoring TLVs registry. The value of the type
+			field of this TLV is <tt>XXX</tt>.</t>
+
+			<t>The value of the TLV is the sequence number of the BMP message
+			in the BMP session, starting at 0, and encoded on 8 bytes.</t>
+
+			<t>The value of the Length field is 8. The &quot;Index&quot; field
+			is not included in the length.</t>
+
+			<t>The TLV structure is illustrated in <xref target="fig-seqnum-tlv">
+			</xref>.</t>
+
+<figure anchor="fig-seqnum-tlv"><name>Sequence Number TLV
+</name>
+<artwork> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Type (2 octets)        |       Length (2 octets)       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|G|      Index (2 octets)       |                               ~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+~                   Sequence Number (8 octets)                  ~
++                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~                               | 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+</artwork>
+</figure>
+		</section>
+		<section title="Extended Flags TLV" anchor="extended-flags-tlv">
+			<t>In this section, we describe the Extended Flags TLV. This TLV
+			carries the Flags field usually present in the Per-Peer Header,
+			while extending the length of the field. This allows for a larger
+			range of flags to be allocated in the future.</t>
+
+			<t>A TLV type &quot;Extended Flags TLV&quot; needs to be reserved
+			from the BMP Route Monitoring TLVs registry. The value of the
+			type field of this TLV is <tt>XXX</tt>.</t>
+
+			<t>The value of the TLV is a sequence of bytes of variable size.
+			The minimum size of the sequence is one, to fit at least the
+			already existing flags. The flags carried in this TLV are defined
+			in the &quot;BMP Extended Peer Flags&quot; IANA registry defined
+			by this document. The first byte of the sequence carries all flags
+			defined previous to this document, that is Flags V, L, A, O, and F.
+			Newly allocated bits will be carried in the following byte of the
+			sequence.</t>
+
+			<t>The value of the &quot;Length&quot; field is the number of bytes
+			in the sequence. The &quot;Index&quot; field is not included in the
+			length.</t>
+
+			<t>The &quot;Index&quot; field is set to 0 to indicate the global
+			scope of the TLV.</t>
+
+			<t>The TLV structure is illustrated in <xref target="fig-flags-tlv">
+			</xref>.</t>
+
+<figure anchor="fig-flags-tlv"><name>Extended Flags TLV
+</name>
+<artwork> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Type (2 octets)        |       Length (2 octets)       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|G|      Index (2 octets)       |        Flags (Variable)       ~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+</figure>
+
+			<t>When this TLV is included in a BMP message, the rightmost bit (X
+			Flag) of the Per-Peer Header Flags MUST be set to 1 to indicate that
+			the flags to consider are carried in this TLV. The flags in the
+			Per-Peer Header are still set according to the current specification,
+			allowing collectors that do not understand the X Flag and
+			&quot;Extended Flags TLV&quot; to still function.</t>
+		</section>
+	    </section>
         </section>
 
         <section title="Error Handling" anchor="ErrHdl">
@@ -620,11 +863,23 @@
 		    </t>
 		    <t>
 			Type = &IANA_RM_CODE_VRF;: Support for VRF/Table Name TLV. The value
-			field is defined in <xref target="VrfTLVinRM"/>
+			field is defined in <xref target="VrfTLVinRM"/>.
+		    </t>
+		    <t>
+			Type = &IANA_RM_CODE_TSTAMP;: Support for Timestamp TLV. The value
+			field is defined in <xref target="timestamp-tlv"/>.
+		    </t>
+		    <t>
+			Type = &IANA_RM_CODE_SEQ;: Support for Sequence TLV. The value field
+			is defined in <xref target="seq-num-tlv"/>.
+		    </t>
+		    <t>
+			Type = &IANA_RM_CODE_FLAGS;: Support for Extended Flags TLV. The value
+			field is defined in <xref target="extended-flags-tlv"/>.
 		    </t>
 		    <t>
 			Type = &IANA_RM_CODE_BGP_PDU;: Support for BGP Message TLV. The value
-			field is defined in <xref target="TLVinRM"/>
+			field is defined in <xref target="TLVinRM"/>.
 		    </t>
 		</list>
 		
@@ -655,6 +910,63 @@
                 availble value for assignment for the registries will be 32767
                 (ie. as opposed to current 65530).
             </t>
+
+		<t>This document requests that IANA assigns the following new
+		parameters to the &quot;BMP Peer Flags for Peer Types 0 through
+		2&quot; registry and to the &quot;BMP Peer Flags for Loc-RIB
+		Instance Peer Type 3&quot; registry:
+
+		* Flag = &quot;7&quot;: X Flag (Extended Flags). Set if the Flags
+		 are carried in the Extended Flags TLV instead of the Per-Peer
+		Header.</t>
+
+		<t>This document also requests the definition of a &quot;BMP
+		Extended Peer Flags&quot; registry which contains flags contained
+		in the &quot;Extended Flags TLV&quot;. The size of this registry
+		is TBD. The registration policy for this registry is <strong>
+		Standards Action</strong> as defined in <xref target="RFC8126"/>.
+		</t>
+		<t>The registry is seeded as follows:
+
+		<ul spacing="compact">
+			<li>Flag 0: V flag <xref target="RFC7854"/></li>
+			<li>Flag 1: L flag <xref target="RFC7854"/></li>
+			<li>Flag 2: A flag <xref target="RFC7854"/></li>
+			<li>Flag 3: O flag <xref target="RFC8671"/></li>
+			<li>Flag 4: F flag <xref target="RFC9069"/></li>
+		</ul>
+		</t>
+
+		<t>This document also requests the definition of a &quot;BMP
+		Timestamp Types&quot; registry. This registry contains type codes
+		for the kinds of timestamps carried by the &quot;Timestamp
+		TLV&quot;. The size of the registry matches the size of the
+		&quot;Timestamp Type&quot; field defined in {#fig-timestamp-tlv}
+		which is 1 byte.</t>
+
+		<t>The registration policy for this registry is <strong>Expert
+		Review</strong> as defined in <xref target="RFC8126"/>.</t>
+
+		<t>The registry is seeded as follows:</t>
+
+		<ul spacing="compact">
+			<li>Type = 0x00: Trigger Time. Set to 0x00 if the timestamp
+			corresponds to the event that triggered BMP to report the
+			route or state, such as receiving a message or a session
+			transition.</li>
+			<li>Type = 0x01: Message Export Time. Set to 0x01 if the
+			timestamp corresponds to the time when the BMP message was
+			generated for export.</li>
+			<li>Type = 0x02: Adj-In Time. Set to 0x02 if the timestamp
+			corresponds to when the route was installed in the Adj-RIB-In,
+			as per <xref target="RFC7854"/>.</li>
+			<li>Type = 0x03: Local-RIB Time. Set to 0x03 if the timestamp
+			corresponds to when the route was installed in the Local-RIB,
+			as per <xref target="RFC9069"/>.</li>
+			<li>Type = 0x04: Adj-Out Time. Set to 0x04 if the timestamp
+			corresponds to when the route was installed in the Adj-RIB-Out,
+			as per <xref target="RFC8671"/>.</li>
+		</ul>
         </section>
 
     </middle>
@@ -669,6 +981,7 @@
 		<?rfc include="reference.RFC.7854.xml"?>
 		<?rfc include="reference.RFC.8126.xml"?>
 		<?rfc include="reference.RFC.8654.xml"?>
+		<?rfc include="reference.RFC.8671.xml"?>
 		<?rfc include="reference.RFC.9069.xml"?>
 		<?rfc include="reference.RFC.9736.xml"?>
 		&I-D.boucadair-nmop-rfc3535-20years-later;
