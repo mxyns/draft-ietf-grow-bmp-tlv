@@ -30,7 +30,7 @@
 
     <front>
         <title abbrev="BMP TLV">
-	    BMP v4: TLV Support for BGP Monitoring Protocol (BMP) Route Monitoring and Peer Down Messages
+	    BMP v4: Extended TLV Support for BGP Monitoring Protocol (BMP)
 	</title>
 
         <author fullname="Paolo Lucente" initials="P" surname="Lucente">
