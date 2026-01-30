@@ -10,6 +10,7 @@
         <!ENTITY IANA_RM_CODE_SEQ "6">
         <!ENTITY IANA_RM_CODE_EXT_FLAGS "7">
         <!ENTITY IANA_RM_CODE_BGP_PDU "8">
+        <!ENTITY IANA_SR_CODE_STATS "1">
         <!ENTITY IANA_ALL_CODE_TSTAMP "TBD1">
         <!ENTITY IANA_ALL_CODE_SEQ "TBD2">
         <!ENTITY IANA_ALL_CODE_EXT_FLAGS "TBD3">
@@ -94,13 +95,14 @@
 		Most of the BGP Monitoring Protocol (BMP) message types make provision
 		for data in Type, Length, Value (TLV) format. However, Route Monitoring
 		messages (which provide a snapshot of the monitored Routing Information
-		Base) and Peer Down messages (which indicate that a peering session was
-		terminated) do not. Supporting (optional) data in TLV format across
-		all BMP message types provides consistent and extensible structures
-		that would be useful among the various use-cases where conveying
-		additional data to a monitoring station is required. This document updates
-		<xref target="RFC7854">RFC 7854</xref> to support TLV data in all message
-		types and defines some essential TLVs.
+		Base) Stats Reports (which supply periodical counters) and Peer Down
+		messages (which indicate that a peering session was terminated) do not.
+		Supporting (optional) data in TLV format across all BMP message types
+		provides consistent and extensible structures that would be useful among
+		the various use-cases where conveying additional data to a monitoring
+		station is required. This document updates <xref target="RFC7854">RFC
+		7854</xref> to support TLV data in all message types and defines some
+		essential TLVs.
             </t>
 	    <t>
 		Additionally, this document introduces support for enterprise-specific
@@ -117,7 +119,7 @@
 	    </t>
 
             <t>
-		The Route Monitoring message consists of:
+		The Route Monitoring message is defined in <xref target="RFC7854">Section 4.6 of</xref> and consists of:
 		<list style="symbols">
 			<t>Common Header</t>
 			<t>Per-Peer Header</t>
@@ -125,8 +127,18 @@
 		</list>
 	    </t>
 
+            <t>
+		The Stats Reports message is defined in <xref target="RFC7854">Section 4.8 of</xref> and consists of:
+		<list style="symbols">
+			<t>Common Header</t>
+			<t>Per-Peer Header</t>
+			<t>Stats Count</t>
+			<t>Stats in TLV format</t>
+		</list>
+	    </t>
+
 	    <t>
-		The Peer Down Notification message consists of:
+		The Peer Down Notification message is defined in <xref target="RFC7854">Section 4.9 of</xref> and consists of:
 		<list style="symbols">
 			<t>Common Header</t>
 			<t>Per-Peer Header</t>
@@ -137,15 +149,15 @@
 	   </t>
 
            <t>
-		This means that both Route Monitoring and Peer Down messages have
-		a non-extensible format (except for the specific case of Peer Down
-		Reason Code 6 as specified in <xref section="5.3" sectionFormat="of"
-		target="RFC9069"/>). In the Route Monitoring case, this prevents
-		the transmission of parsing characteristics of transported NLRIs
-		(e.g. ADD-PATH, Multi Labels, etc.), RIB status of a path (e.g.
-		primary, backup, unused, etc.) or of vendor-specific data. In the
-		Peer Down case, this prevents matching with TLVs previously sent
-		with the Peer Up message. This document:
+		This means that Route Monitoring, Stats Reports and Peer Down messages
+		have a non-extensible format (except for the specific case of Peer Down
+		Reason Code 6 as specified in <xref target="RFC9069">Section 5.3 of</xref>.
+		In the Route Monitoring case, this prevents the transmission of parsing
+		characteristics of transported NLRIs (e.g. ADD-PATH, Multi Labels, etc.),
+		RIB status of a path (e.g. primary, backup, unused, etc.) or of vendor-
+		specific data. In the Stats Resports and Peer Down case, this prevents
+		matching with TLVs previously sent in other messages, including the Peer
+		Up message. This document:
 		<list style="symbols">
 			<t>Bumps the BMP version for all message types defined in
 			   <xref target="RFC7854">RFC 7854</xref> for backward compatibility</t>
@@ -563,6 +575,21 @@
 		    data MAY follow the Reason field.
 		</t>
 	    </section>
+	    <section title="TLV Data in Stats Reports" anchor="TLVinSR">
+		<t>
+		    The Stats Reports message is extended so that the Stats Count
+		    and stats data as defined in <xref target="RFC7854">Section
+		    4.8 of</xref> are all enclosed inside a Stats TLV with code-
+		    point &IANA_SR_CODE_STATS;. The Stats TLV is mandatory and
+		    can be followed by optional TLV data. 
+		</t>
+		<t>
+		    While the Stats Count field could be used to discriminate
+		    among stats data and trailing optional TLV data, it is felt
+		    that enclosing Stats Count and stats data inside a container
+		    TLV is cleaner by embracing a fully TLV'd body. 
+		</t>
+	    </section>
 	    <section title="TLV Data in Other BMP Messages" anchor="TLVinOther">
 		<t>
 		    All other message types defined in <xref target="RFC7854">RFC7854</xref>
@@ -876,13 +903,27 @@
 			field is defined in <xref target="TLVinRM"/>.
 		    </t>
 		</list>
+	    </t>
+
+	    <t>
+		It is requested the definition of a new "BMP Stats Reports TLVs" registry seeded
+                with the following new TLV types (<xref target="TLVinSR"/>):
+
+                <list style="symbols">
+                    <t>
+                        Type = &IANA_SR_CODE_STATS;: Support for Stats TLV to enclose Stats Count
+			and stats data.
+                    </t>
+		</list>
+	    </t>
 		
-		Values 0 through 16383 of the BMP Route Monitoring TLVs MUST be assigned
-		using the Standards Action policy as defined in <xref target="RFC8126">
-		Section 4.9 of</xref>; values 16384 through 32767 MUST be assigned using
-		the First Come First Served policy as defined in <xref target="RFC8126">
-		Section 4.4 of</xref>. The upper bound of the registry is 65535. Value
-		65535 is Reserved.
+	    <t>
+		Values 0 through 16383 of the "BMP Route Monitoring TLVs" and BMP Stats
+		Reports TLVs" registries MUST be assigned using the Standards Action policy
+		as defined in <xref target="RFC8126">Section 4.9 of</xref>; values 16384
+		through 32767 MUST be assigned using the First Come First Served policy as
+		defined in <xref target="RFC8126"> Section 4.4 of</xref>. The upper bound
+		of the registry is 65535. Value 65535 is Reserved.
             </t>
             <t>                                 
                 The TLV Type values used by BMP are managed by IANA as are the
