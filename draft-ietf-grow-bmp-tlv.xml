@@ -3,13 +3,13 @@
         <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
         <!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 	<!ENTITY I-D.boucadair-nmop-rfc3535-20years-later SYSTEM "https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.boucadair-nmop-rfc3535-20years-later.xml">
-        <!ENTITY IANA_RM_CODE_SP "1">
-        <!ENTITY IANA_RM_CODE_GROUP "2">
-        <!ENTITY IANA_RM_CODE_VRF "3">
-        <!ENTITY IANA_RM_CODE_TSTAMP "5">
-        <!ENTITY IANA_RM_CODE_SEQ "6">
-        <!ENTITY IANA_RM_CODE_EXT_FLAGS "7">
-        <!ENTITY IANA_RM_CODE_BGP_PDU "8">
+        <!ENTITY IANA_RM_CODE_SEQ "1">
+        <!ENTITY IANA_RM_CODE_EXT_FLAGS "2">
+        <!ENTITY IANA_RM_CODE_TSTAMP "3">
+        <!ENTITY IANA_RM_CODE_GROUP "4">
+        <!ENTITY IANA_RM_CODE_VRF "5">
+        <!ENTITY IANA_RM_CODE_SP "6">
+        <!ENTITY IANA_RM_CODE_BGP_PDU "7">
         <!ENTITY IANA_SR_CODE_STATS "1">
         <!ENTITY IANA_ALL_CODE_TSTAMP "TBD1">
         <!ENTITY IANA_ALL_CODE_SEQ "TBD2">
@@ -742,7 +742,8 @@
 			session.</t>
 
 			<t>The value of the TLV is the sequence number of the BMP message
-			in the BMP session, starting at 0, and encoded on 8 bytes.</t>
+			in the BMP session, starting at 0, and encoded on 8 bytes. If the
+			sequence number would overflow, the BMP session MUST be reset.</t>
 
 			<t>The value of the Length field is 8. The Index field is not
 			included in the length.</t>
@@ -875,8 +876,16 @@
 
 		<list style="symbols">
 		    <t>
-			Type = &IANA_RM_CODE_SP;: Support for Stateless Parsing TLV. The value
-			field is defined in <xref target="SpTLVinRM"/>.
+			Type = &IANA_RM_CODE_SEQ;: Support for Sequence TLV. The value field
+			is defined in <xref target="seq-num-tlv"/>.
+		    </t>
+		    <t>
+			Type = &IANA_RM_CODE_EXT_FLAGS;: Support for Extended Flags TLV. The value
+			field is defined in <xref target="extended-flags-tlv"/>.
+		    </t>
+		    <t>
+			Type = &IANA_RM_CODE_TSTAMP;: Support for Timestamp TLV. The value
+			field is defined in <xref target="timestamp-tlv"/>.
 		    </t>
 		    <t>
 			Type = &IANA_RM_CODE_GROUP;: Support for grouping of TLVs. The value
@@ -887,16 +896,8 @@
 			field is defined in <xref target="VrfTLVinRM"/>.
 		    </t>
 		    <t>
-			Type = &IANA_RM_CODE_TSTAMP;: Support for Timestamp TLV. The value
-			field is defined in <xref target="timestamp-tlv"/>.
-		    </t>
-		    <t>
-			Type = &IANA_RM_CODE_SEQ;: Support for Sequence TLV. The value field
-			is defined in <xref target="seq-num-tlv"/>.
-		    </t>
-		    <t>
-			Type = &IANA_RM_CODE_EXT_FLAGS;: Support for Extended Flags TLV. The value
-			field is defined in <xref target="extended-flags-tlv"/>.
+			Type = &IANA_RM_CODE_SP;: Support for Stateless Parsing TLV. The value
+			field is defined in <xref target="SpTLVinRM"/>.
 		    </t>
 		    <t>
 			Type = &IANA_RM_CODE_BGP_PDU;: Support for BGP Message TLV. The value
